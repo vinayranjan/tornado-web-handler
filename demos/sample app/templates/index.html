@@ -1,0 +1,73 @@
+{% autoescape None %}
+{% import brain as b %}
+{% import json %}
+{% import tornado.web %}
+{% from tornado import template %}
+{% set T = handler.render %}
+{% set full_data, data = b.barchart_data(handler) %}
+
+{% set month_filter = b.get_filter(full_data, 'Month') %}
+{% set channel_grouping_filter = b.get_filter(full_data, 'channel_grouping') %}
+
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Home</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+  <body>
+  <a href="{#{ T('base.html', data = full_data) }#}">I am mak</a>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="." class="navbar-brand"><span class="glyphicon glyphicon-home"></span></a>
+          <a class="navbar-brand" href="." title="Student Management System">Home</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle menu-selected" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ handler.get_argument('month', 'January') }}<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% for filter_value in month_filter %}
+                  <li class="main-menu"><a href="?month={{filter_value}}">{{ filter_value }}</a></li>
+                {% end %}
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle menu-selected" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ handler.get_argument('channel_grouping', 'ALL') }}<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% for filter_value in channel_grouping_filter %}
+                  <li class="main-menu"><a href="?channel_grouping={{filter_value}}">{{ filter_value }}</a></li>
+                {% end %}
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <p class="navbar-brand">
+              <span class="glyphicon glyphicon-user"></span>
+              <span class="glyphicon glyphicon-print" onclick="window.print()"></span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <br/><br/><br/><br/>
+    <center>
+      {{ data.to_html() }}
+    </center>
+</body>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+</html>
